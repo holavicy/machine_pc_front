@@ -1,0 +1,72 @@
+.top-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.top-wrapper .search-wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.top-wrapper .search-wrapper .search-item {
+  min-width: 200px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.top-wrapper .search-wrapper .search-item .ant-select {
+  font-size: 12px;
+  flex-grow: 1;
+}
+
+.top-wrapper .search-wrapper .search-item label {
+  width: 80px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.top-wrapper .search-wrapper .search-item input,
+.top-wrapper .search-wrapper .search-item input::-webkit-input-placeholder {
+  font-size: 12px;
+}
+
+.top-wrapper .top-actions .button-cus {
+  margin-left: 20px;
+  font-size: 12px;
+}
+
+.actions a {
+  display: inline-block;
+  margin-right: 10px;
+}
+.actions a.danger {
+  color: #ff4d4f;
+}
+.actions a.warning {
+  color: #9b9126;
+}
+
+.actions a.normal {
+  color: #1890ff;
+}
+
+.actions a.hover {
+  cursor: pointer;
+}
+
+i.required{
+  color: #f5222d;
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.cus-link {
+  display: inline-block;
+  color: #1890ff;
+}
+.cus-link:hover {
+  cursor: pointer;
+}
