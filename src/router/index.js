@@ -296,6 +296,15 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  // 已登录后判断权限，有权限继续，没有权限跳转到403界面
+  if (to.path !== from.path) {
+    NProgress.start();
+  }
+  // 若breadCrumb, 分情况赋值openKeys 和 selectedKeys
+  if (to.meta.breadCrumb && to.meta.breadCrumb.length > 1) {
+    to.meta.selectedKeys = [from.fullPath];
+    to.meta.breadCrumb[1].path = from.fullPath;
+  }
   // 判断是否登录，已登录继续，未登录则调用免登接口
   if (!isLogin()) {
     login().then(() => {
@@ -305,21 +314,15 @@ router.beforeEach((to, from, next) => {
           path: "/403",
         });
         NProgress.done();
+      } else {
+        next();
+        NProgress.done();
       }
     });
+  } else {
+    next();
+    NProgress.done();
   }
-  // 已登录后判断权限，有权限继续，没有权限跳转到403界面
-  if (to.path !== from.path) {
-    NProgress.start();
-  }
-
-  // 若breadCrumb, 分情况赋值openKeys 和 selectedKeys
-  if (to.meta.breadCrumb && to.meta.breadCrumb.length > 1) {
-    to.meta.selectedKeys = [from.fullPath];
-    to.meta.breadCrumb[1].path = from.fullPath;
-  }
-
-  next();
 });
 
 router.afterEach(() => {

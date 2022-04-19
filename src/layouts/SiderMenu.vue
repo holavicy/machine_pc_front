@@ -74,7 +74,7 @@ export default {
     getMenuData(routes = [], parentKeys = [], selectedKey) {
       const menuData = [];
       for (let item of routes) {
-        if (item.meta && item.meta.authority && check(item.meta.authority)) {
+        if (item.meta && item.meta.authority && !check(item.meta.authority)) {
           break;
         }
         if (item.name && !item.hideInMenu) {

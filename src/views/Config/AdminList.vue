@@ -36,12 +36,10 @@
       <template slot="action" slot-scope="record">
         <div class="actions">
           <a-popconfirm
-            :visible="visible"
             title="确定删除此管理员？"
             ok-text="确定"
             cancel-text="取消"
             @confirm="confirmDelete(record)"
-            @visibleChange="handleVisibleChange"
           >
             <a href="#" class="danger">删除</a></a-popconfirm
           >
@@ -241,7 +239,6 @@ export default {
         id: record.id,
       };
       this.$api.DEL_ADMIN(data).then((res) => {
-        console.log(res);
         if (res.data.code === 0) {
           this.$message.success("删除成功");
           this.fetch(1);

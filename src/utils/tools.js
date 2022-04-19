@@ -28,9 +28,6 @@ export function computeTimes(data) {
   const minutes = parseInt(seconds / 60); // 取整，获取总的分钟数
   const minute = minutes % 60; // 取余，获取分钟数
   const hour = parseInt(minutes / 60); // 取整，获取小时数
-  console.log(hour);
-  console.log(minute);
-  console.log(second);
   return data > 0
     ? (hour > 0 ? hour + "小时" : "") +
         (minute > 0 ? minute + "分钟" : "") +

@@ -91,7 +91,7 @@ export default {
     // 获取当前登录人的工号
     // 获取当前登录人的角色
     const user = this.$store.state.user;
-    this.staffNo = user.staffNo;
+    this.staffNo = user.job_number + "";
     this.isSuperAdmin = user.isSuperAdmin;
     this.getMachineData();
     this.getMouldData();
