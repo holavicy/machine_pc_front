@@ -17,6 +17,7 @@
             placeholder="请选择"
             :defaultValue="defaultStatus"
             size="small"
+            allowClear
             @change="handleChange"
           >
             <a-select-option
