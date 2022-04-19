@@ -4,12 +4,12 @@
       <div class="title">基本信息</div>
       <div class="info">
         <div class="info-group">
-          <div class="info-item">模具编号：{{ baseInfo.num }}</div>
+          <div class="info-item">EPC编号：{{ baseInfo.epc_num }}</div>
           <div class="info-item">小保养上限：{{ baseInfo.small_limit }}次</div>
-          <div class="info-item">控制箱编号：{{ baseInfo.device_num }}</div>
+          <!-- <div class="info-item">控制箱编号：{{ baseInfo.device_num }}</div> -->
         </div>
         <div class="info-group">
-          <div class="info-item">模具名称：{{ baseInfo.epc_name }}</div>
+          <div class="info-item">模具名称：{{ baseInfo.name }}</div>
           <div class="info-item">大保养上限：{{ baseInfo.big_limit }}次</div>
         </div>
         <div class="info-group">
@@ -191,12 +191,11 @@ export default {
   created() {
     const machineId = this.$route.params.id;
     const machineNum = this.$route.params.num;
-    console.log("mmmmmm");
-    console.log(machineNum);
+    const status = this.$route.params.status;
     this.machineId = machineId;
     if (machineId) {
       // 获取模具详情；
-      this.fetchBaseInfo(machineNum);
+      this.fetchBaseInfo(machineNum, status);
       // 获取小保养记录;
       this.fetchSmallMaintain();
       // 获取大保养记录；
@@ -212,10 +211,11 @@ export default {
     callback(key) {
       console.log(key);
     },
-    fetchBaseInfo(num) {
+    fetchBaseInfo(num, status) {
       const queryData = {
         cateId: 1,
-        num: num,
+        epcNum: num,
+        status: status,
         pageNum: 1,
         pageSize: 1000,
       };

@@ -45,8 +45,8 @@
           >
             <a href="#" class="danger">删除</a></a-popconfirm
           >
-          <a @click="showModalOne(record)">已管理设备</a>
-          <a @click="showModalTwo(record)">分配设备</a>
+          <!-- <a @click="showModalOne(record)">已管理设备</a>
+          <a @click="showModalTwo(record)">分配设备</a> -->
         </div>
       </template>
     </a-table>

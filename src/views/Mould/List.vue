@@ -4,20 +4,12 @@
     <div class="top-wrapper">
       <div class="search-wrapper">
         <div class="search-item">
-          <label for="">模具编号：</label>
-          <a-input
-            placeholder="请输入模具编号"
-            size="small"
-            v-model="machineNum"
-          />
+          <label for="">EPC编号：</label>
+          <a-input placeholder="请输入EPC编号" size="small" v-model="epcNum" />
         </div>
         <div class="search-item">
-          <label for="">控制箱编号：</label>
-          <a-input
-            placeholder="请输入控制箱编号"
-            size="small"
-            v-model="deviceNum"
-          />
+          <label for="">模具名称：</label>
+          <a-input placeholder="请输入模具名称" size="small" v-model="name" />
         </div>
         <div class="search-item">
           <label for="">模具状态：</label>
@@ -62,8 +54,10 @@
       @change="handleTableChange"
       :rowClassName="rowClassName"
     >
-      <template slot="num" slot-scope="record">
-        <span class="cus-link" @click="goPage(record)">{{ record.num }}</span>
+      <template slot="epc_num" slot-scope="record">
+        <span class="cus-link" @click="goPage(record)">{{
+          record.epc_num
+        }}</span>
       </template>
       <template slot="status" slot-scope="status">
         {{ statusDict[status] }}
@@ -122,10 +116,9 @@
       </template>
     </a-table>
     <!-- 新增编辑模具弹窗 -->
-    <mould-modal
+    <mould-form-modal
       ref="mouldModal"
       :title="modalTitle"
-      :cateId="cateId"
       :form="defaultForm"
       :defaultValue="defaultValue"
       @handleOk="mouldOk"
@@ -149,22 +142,22 @@
 
 <script>
 import { dateChangeFormat, statusDict } from "../../utils/tools";
-import MouldModal from "../../components/MouldModal.vue";
+import MouldFormModal from "../../components/MouldFormModal.vue";
 import StartMaintainModal from "../../components/StartMaintainModal.vue";
 import StopMaintainModal from "../../components/StopMaintainModal.vue";
 
 const columns = [
   {
-    title: "模具编号",
-    key: "num",
-    width: 120,
+    title: "EPC编号",
+    key: "epc_num",
+    width: 240,
     fixed: "left",
-    scopedSlots: { customRender: "num" },
+    scopedSlots: { customRender: "epc_num" },
   },
   {
     title: "模具名称",
-    key: "epc_name",
-    dataIndex: "epc_name",
+    key: "name",
+    dataIndex: "name",
     width: 140,
     fixed: "left",
   },
@@ -212,12 +205,6 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: "控制箱编号",
-    key: "device_num",
-    dataIndex: "device_num",
-    width: 140,
-  },
-  {
     title: "添加时间",
     key: "create_time",
     ellipsis: true,
@@ -234,7 +221,7 @@ const columns = [
 ];
 export default {
   components: {
-    MouldModal,
+    MouldFormModal,
     StartMaintainModal,
     StopMaintainModal,
   },
@@ -246,8 +233,8 @@ export default {
       data: [],
       pagination: { current: 1, results: 10 },
       loading: false,
-      machineNum: "",
-      deviceNum: "",
+      epcNum: "",
+      name: "",
       status: null,
       modalTitle: "",
       editId: "",
@@ -287,8 +274,8 @@ export default {
       this.loading = true;
       const queryData = {
         cateId: this.cateId,
-        num: this.machineNum,
-        deviceNum: this.deviceNum,
+        epcNum: this.epcNum,
+        name: this.name,
         status: this.status,
         pageNum: this.pagination.current,
         pageSize: this.pagination.results,
@@ -328,6 +315,8 @@ export default {
     },
     // 显示新增编辑模具弹窗
     showMouldModal(type, record) {
+      record = record || {};
+      console.log(record);
       const promise_get_samll_maintain_item = new Promise((resolve, reject) => {
         const data = {
           type: 1,
@@ -371,20 +360,40 @@ export default {
         });
       });
 
-      const promise_get_selected_admin_list = new Promise((resolve, reject) => {
+      const promise_get_supply_list = new Promise((resolve, reject) => {
         const data = {
-          name: record.temp_2 || "",
           pageNum: 1,
           pageSize: 1000,
         };
-        this.$api.GET_ADMIN_LIST(data).then((res) => {
-          const data = res.data.content.map((user) => ({
-            text: user.staff_name,
-            value: user.id,
+        this.$api.GET_SUPPLY_LIST(data).then((res) => {
+          const data = res.data.content.map((supply) => ({
+            text: supply.supplier_name,
+            value: supply.id,
           }));
-          this.defaultForm.adminId = res.data.content[0].id;
+          if (record && record.supplier_name) {
+            data.forEach((item) => {
+              if (item.text === record.supplier_name) {
+                this.defaultForm.supplierId = item.value;
+              }
+            });
+          }
+          this.$refs.mouldModal.supplyList = data;
           resolve();
         });
+      });
+
+      const promise_get_selected_admin_list = new Promise((resolve, reject) => {
+        if (record && record.temp_2) {
+          const data = {
+            name: record.temp_2 || "",
+            pageNum: 1,
+            pageSize: 1000,
+          };
+          this.$api.GET_ADMIN_LIST(data).then((res) => {
+            this.defaultForm.adminId = res.data.content[0].id;
+            resolve();
+          });
+        }
       });
 
       const promise_get_selected_small_item_list = new Promise(
@@ -440,7 +449,7 @@ export default {
         });
       }
       if (type === "edit") {
-        record.deviceNum = record.device_num;
+        record.epcNum = record.epc_num;
         this.defaultForm = { ...record };
         this.defaultForm.num = this.defaultForm.num + "";
         this.defaultForm.big_limit = this.defaultForm.big_limit / 1000;
@@ -454,6 +463,7 @@ export default {
           promise_get_selected_small_item_list,
           promise_get_selected_big_item_list,
           promise_get_selected_admin_list,
+          promise_get_supply_list,
         ]).then((res) => {
           this.$refs.mouldModal.visible = true;
         });
@@ -463,11 +473,12 @@ export default {
     // 新增编辑模具提交
     mouldOk(form) {
       let data = {
-        num: form.num,
-        deviceNum: form.deviceNum,
+        epcNum: form.epcNum,
+        name: form.name,
         small_limit: form.small_limit,
         big_limit: form.big_limit,
         adminId: form.adminId,
+        supplierId: form.supplierId,
         cateId: this.cateId,
         smallStr: form.small_maintain_item.join(","),
         bigStr: form.big_maintain_item.join(","),
@@ -476,7 +487,7 @@ export default {
 
       if (this.editId) {
         data.id = this.editId;
-        this.$api.EDIT_MOULD(data).then((res) => {
+        this.$api.UPDATE_MOULD(data).then((res) => {
           if (res.data.code === 0) {
             this.$refs.mouldModal.visible = false;
             this.$message.success("编辑成功");
@@ -486,7 +497,7 @@ export default {
           }
         });
       } else {
-        this.$api.SET_MOULD(data).then((res) => {
+        this.$api.MACHINE_ADD_MOULD(data).then((res) => {
           if (res.data.code === 0) {
             this.$refs.mouldModal.visible = false;
             this.$message.success("添加成功");
@@ -538,7 +549,7 @@ export default {
       form.machineId = this.editId;
       this.$api.ADD_START_RECORD(form).then((res) => {
         if (res.data.code === 0) {
-          this.$message.success("提交成功，设备正在小保养中！");
+          this.$message.success("提交成功，设备正在保养中！");
           this.fetch();
         } else {
           this.$message.error(this.data.errMsg);
@@ -589,7 +600,9 @@ export default {
       });
     },
     goPage(record) {
-      this.$router.push(`/mould/detail/${record.id}/${record.num}`);
+      this.$router.push(
+        `/mould/detail/${record.id}/${record.epc_num}/${record.status}`
+      );
     },
     confirmDelete(id) {
       const data = {

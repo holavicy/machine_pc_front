@@ -27,7 +27,7 @@
           placeholder="请选择人员"
           :disabled="disabled"
         />
-        <a-icon type="user" class="append-right" @click="chooseStaff" />
+        <a-icon type="user-add" class="append-right" @click="chooseStaff" />
       </a-form-model-item>
       <a-form-model-item ref="startTime" label="开始时间：" prop="startTime">
         <a-date-picker
@@ -186,11 +186,12 @@ export default {
 <style>
 .form-item-admin .ant-form-item-children .append-right {
   width: 100px;
-  font-size: 18px;
+  font-size: 24px;
   margin-left: 10px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   text-align: left;
+  color: #40a9ff;
 }
 </style>

@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 const GET_EPC_LIST = function (data) {
   return request({
-    url: "/epc/load",
+    url: "/machine/loadBySupplier",
     params: data,
   });
 };

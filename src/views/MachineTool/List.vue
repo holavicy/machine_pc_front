@@ -439,7 +439,7 @@ export default {
       form.machineId = this.editId;
       this.$api.ADD_START_RECORD(form).then((res) => {
         if (res.data.code === 0) {
-          this.$message.success("提交成功，设备正在小保养中！");
+          this.$message.success("提交成功，设备正在保养中！");
           this.fetch();
         } else {
           this.$message.error(this.data.errMsg);
@@ -479,7 +479,9 @@ export default {
       });
     },
     goPage(record) {
-      this.$router.push(`/machineTool/detail/${record.id}/${record.num}`);
+      this.$router.push(
+        `/machineTool/detail/${record.id}/${record.num}/${record.status}`
+      );
     },
   },
 };

@@ -4,20 +4,12 @@
     <div class="top-wrapper">
       <div class="search-wrapper">
         <div class="search-item">
-          <label for="">模具编号：</label>
-          <a-input
-            placeholder="请输入模具编号"
-            size="small"
-            v-model="machineNum"
-          />
+          <label for="">EPC编号：</label>
+          <a-input placeholder="请输入EPC编号" size="small" v-model="epcNum" />
         </div>
         <div class="search-item">
-          <label for="">控制箱编号：</label>
-          <a-input
-            placeholder="请输入控制箱编号"
-            size="small"
-            v-model="deviceNum"
-          />
+          <label for="">模具名称：</label>
+          <a-input placeholder="请输入模具名称" size="small" v-model="name" />
         </div>
       </div>
       <div class="top-actions">
@@ -36,8 +28,10 @@
       :scroll="{ x: 1450 }"
       @change="handleTableChange"
     >
-      <template slot="num" slot-scope="record">
-        <span class="cus-link" @click="goPage(record)">{{ record.num }}</span>
+      <template slot="epc_num" slot-scope="record">
+        <span class="cus-link" @click="goPage(record)">{{
+          record.epc_num
+        }}</span>
       </template>
       <template slot="status" slot-scope="status">
         {{ machineStatus[status] }}
@@ -79,16 +73,16 @@
 import { dateChangeFormat } from "../../utils/tools";
 const columns = [
   {
-    title: "模具编号",
-    key: "num",
-    width: 100,
+    title: "EPC编号",
+    key: "epc_num",
+    width: 240,
     fixed: "left",
-    scopedSlots: { customRender: "num" },
+    scopedSlots: { customRender: "epc_num" },
   },
   {
     title: "模具名称",
-    key: "epc_name",
-    dataIndex: "epc_name",
+    key: "name",
+    dataIndex: "name",
     width: 140,
     fixed: "left",
   },
@@ -133,12 +127,12 @@ const columns = [
     width: 100,
     ellipsis: true,
   },
-  {
-    title: "控制箱编号",
-    key: "device_num",
-    dataIndex: "device_num",
-    width: 160,
-  },
+  // {
+  //   title: "控制箱编号",
+  //   key: "device_num",
+  //   dataIndex: "device_num",
+  //   width: 160,
+  // },
   {
     title: "添加时间",
     key: "create_time",
@@ -162,8 +156,8 @@ export default {
       data: [],
       pagination: { current: 1, results: 10 },
       loading: false,
-      machineNum: "",
-      deviceNum: "",
+      epcNum: "",
+      name: "",
     };
   },
   mounted() {
@@ -187,8 +181,8 @@ export default {
       this.loading = true;
       const queryData = {
         cateId: this.cateId,
-        num: this.machineNum,
-        deviceNum: this.deviceNum,
+        epcNum: this.epcNum,
+        name: this.name,
         status: 3,
         pageNum: this.pagination.current,
         pageSize: this.pagination.results,
@@ -221,7 +215,9 @@ export default {
       });
     },
     goPage(record) {
-      this.$router.push(`/mould/detail/${record.id}/${record.num}`);
+      this.$router.push(
+        `/mould/detail/${record.id}/${record.epc_num}/${record.status}`
+      );
     },
     confirmDelete(id) {
       const data = {

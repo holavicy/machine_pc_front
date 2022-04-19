@@ -130,7 +130,7 @@ export default {
     handleOk(record) {
       console.log(record);
       if (this.editId) {
-        record.id = this.editId;
+        record.supplierId = this.editId;
         this.$api.UPDATE_SUPPLY(record).then((res) => {
           if (res.data.code === 0) {
             this.$message.success("编辑成功");

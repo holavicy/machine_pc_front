@@ -201,8 +201,8 @@ const bigColumns = [
   },
   {
     title: "保养说明",
-    dataIndex: "desc",
-    key: "desc",
+    dataIndex: "remark",
+    key: "remark",
   },
 ];
 const openColumns = [
@@ -252,8 +252,8 @@ export default {
       targetOffset: 60,
 
       maintainStatus: {
-        1: "保养中",
-        2: "保养结束",
+        0: "保养中",
+        1: "保养结束",
       },
       modalTitle: "",
       openRecordId: "",
@@ -263,10 +263,11 @@ export default {
   created() {
     const machineId = this.$route.params.id;
     const machineNum = this.$route.params.num;
+    const status = this.$route.params.status;
     this.machineId = machineId;
     if (machineId) {
       // 获取机床详情；
-      this.fetchBaseInfo(machineNum);
+      this.fetchBaseInfo(machineNum, status);
       // 获取小保养记录;
       this.fetchSmallMaintain();
       // 获取大保养记录；
@@ -284,10 +285,11 @@ export default {
     callback(key) {
       console.log(key);
     },
-    fetchBaseInfo(num) {
+    fetchBaseInfo(num, status) {
       const queryData = {
         cateId: 2,
         num: num,
+        status: status,
         pageNum: 1,
         pageSize: 1000,
       };

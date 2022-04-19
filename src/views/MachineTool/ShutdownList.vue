@@ -211,7 +211,9 @@ export default {
       });
     },
     goPage(record) {
-      this.$router.push(`/machineTool/detail/${record.id}/${record.num}`);
+      this.$router.push(
+        `/machineTool/detail/${record.id}/${record.num}/${record.status}`
+      );
     },
     confirmDelete(id) {
       const data = {

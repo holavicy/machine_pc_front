@@ -24,8 +24,8 @@ const columns = [
   },
   {
     title: "模具名称",
-    dataIndex: "epc_name",
-    key: "epc_name",
+    dataIndex: "name",
+    key: "name",
     ellipsis: true,
   },
 ];
@@ -48,9 +48,7 @@ export default {
     this.fetch(1);
   },
   created() {
-    const supplierId = this.$route.params.supplyId;
     const supplierName = this.$route.params.supplyName;
-    this.supplierId = supplierId;
     this.supplierName = supplierName;
   },
   methods: {
@@ -69,7 +67,7 @@ export default {
       const queryData = {
         pageNum: this.pagination.current,
         pageSize: this.pagination.pageSize,
-        supplierId: this.supplierId,
+        supplierName: this.supplierName,
       };
       this.loading = true;
       this.$api.GET_EPC_LIST(queryData).then((res) => {

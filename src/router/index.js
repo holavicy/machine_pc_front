@@ -85,7 +85,7 @@ const routes = [
               ),
           },
           {
-            path: "/machineTool/detail/:id/:num",
+            path: "/machineTool/detail/:id/:num/:status",
             meta: {
               title: "机床详情",
               breadCrumb: [
@@ -150,7 +150,7 @@ const routes = [
               ),
           },
           {
-            path: "/mould/detail/:id/:num",
+            path: "/mould/detail/:id/:num/:status",
             meta: {
               title: "模具详情",
               breadCrumb: [

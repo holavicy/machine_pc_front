@@ -34,9 +34,29 @@ const EDIT_MOULD = function (data) {
   });
 };
 
+const UPDATE_MOULD = function (data) {
+  data.big_limit = data.big_limit * 1000;
+  return request({
+    url: "/machine/modifyMJ",
+    data,
+    method: "post",
+  });
+};
+
+const MACHINE_ADD_MOULD = function (data) {
+  data.big_limit = data.big_limit * 1000;
+  return request({
+    url: "machine/addMJ",
+    data,
+    method: "post",
+  });
+};
+
 export default {
   GET_MOULD_LIST,
   SET_MOULD,
   EDIT_MOULD,
   UPDATE_STATUS,
+  MACHINE_ADD_MOULD,
+  UPDATE_MOULD,
 };
